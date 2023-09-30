@@ -1,70 +1,64 @@
+from flask import Flask, request, jsonify
 from adb_utils import AdbAutomation
-from time import sleep
+from telegram_gifting import gift_premium
+import threading
+import queue
 
-SCREEN_WIDTH = 1080
-SCREEN_HEIGHT = 2220
-
-
-def gift_premium(automation, username):
-    """
-    Gifts a premium subsctiption to a specified Telegram username.
-    """
-
-    # Tap on the cancel cross
-    automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT / 2 - 100)
-    sleep(1)
-
-    # Tap to enter username
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 100)
-    sleep(0.5)
-
-    # Insert username
-    automation.input_text(username)
-    sleep(0.5)
-
-    # Confirm username
-    automation.press_keyevent(66)
-    sleep(1)
-
-    # Tap on "3 month"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.7)
-    sleep(0.5)
-
-    # Tap on "Gift Telegram Premium"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76)
-    sleep(2)
-
-    # Tap on "Buy Gift for {username}"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9)
-    sleep(2)
-
-    # Tap on "Buy Premium with Tonkeeper"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85)
-    sleep(2)
-
-    # Tap on "Confirm"
-    automation.tap(SCREEN_WIDTH * 0.25, SCREEN_HEIGHT * 0.9)
-    sleep(2)
-
-    # Temporary tap for return
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
-    sleep(1)
+app = Flask(__name__)
+API_KEY = "YOU_API_KEY"
+task_queue = queue.Queue()
 
 
-def main():
-    try:
-        automation = AdbAutomation()
-        usernames = ["@vyasm", "@vyasmQEW", "@tony_stark_py"]
+def worker():
+    """Background worker that processes tasks."""
+    while True:
+        task = task_queue.get()
+        if task is None:
+            break
+        try:
+            automation = AdbAutomation()
+            gift_premium(automation, task)
+        except Exception as e:
+            print(f"Error processing task for {task}: {str(e)}")
+        task_queue.task_done()
 
-        for username in usernames:
-            try:
-                gift_premium(automation, username)
-            except Exception as e:
-                print(f"Failed to gift premium to {username}. Error: {str(e)}")
 
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
+worker_thread = threading.Thread(target=worker)
+worker_thread.start()
+
+
+@app.before_request
+def limit_remote_addr():
+    """API key verification."""
+    if request.endpoint == 'gift_api' and request.headers.get("x-api-key") != API_KEY:
+        return jsonify({"error": "Unauthorized"}), 401
+
+
+@app.route('/gift', methods=['POST'])
+def gift_api():
+    """Endpoint to gift premium subscription."""
+    data = request.json
+
+    # Validating the request data
+    if not data or "usernames" not in data:
+        return jsonify({"error": "usernames parameter is missing"}), 400
+
+    usernames = data["usernames"]
+    if not isinstance(usernames, list):
+        return jsonify({"error": "usernames should be a list"}), 400
+
+    for username in usernames:
+        task_queue.put(username)
+
+    return jsonify({"message": "Usernames have been added to the queue for gifting."}), 202
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        app.run(host="0.0.0.0", port=80)
+    finally:
+        # Ensure all tasks are completed before exiting
+        task_queue.join()
+        # Stop the worker thread
+        task_queue.put(None)
+        worker_thread.join()

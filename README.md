@@ -1,41 +1,56 @@
 # Telegram Premium Gifting Automation
 
-Automate the process of gifting Telegram Premium subscriptions to specified usernames using ADB.
+This documentation provides instructions for setting up and running the Telegram Premium Gifting Automation tool. This server application has been developed to automate the process of gifting Telegram Premium subscriptions via ADB interactions with the Tonkeeper application.
 
-## Description
+## Requirements
 
-This Python script automates the process of gifting Telegram Premium subscriptions to a list of Telegram usernames. The automation is accomplished using Android Debug Bridge (ADB) to simulate user interactions on an Android device.
+- Python >= 3.9
+- ADB tools properly installed and configured
+- An Android device with ADB debugging enabled
+- The Tonkeeper application installed and active on the device
 
-## Prerequisites
+## Project Files
 
-- Python 3.x
-- ADB tools installed and set up
-- A connected Android device with ADB debugging enabled
-- Tonkeeper app installed and logged in on the device
+```
+- adb_utils.py          : Contains utility functions for ADB interactions.
+- client_request.py     : Demonstrates the correct method to structure client requests to the server.
+- main.py               : The central server script.
+- telegram_gifting.py   : Handles the automation of the gifting process.
+- requirements.txt      : Specifies required Python packages.
+- README.md             : This documentation file.
+```
 
-## Setup
+## Installation
 
 1. Clone the repository:
+   ```bash
+   git clone https://github.com/vyacheslavshv/telegram-premium-fragment.git
    ```
-   git clone https://github.com/vyacheslavshv/telegram-premium-gifting.git
+
+2. Move to the project directory:
+   ```bash
+   cd telegram-premium-fragment
    ```
-2. Navigate to the project directory:
-   ```
-   cd telegram-premium-gifting
-   ```
-3. Install the required Python packages:
-   ```
+
+3. Install the necessary Python packages:
+   ```bash
    pip install -r requirements.txt
    ```
 
 ## Usage
 
-1. Edit the `main.py` file and update the `usernames` list with the Telegram usernames to whom you want to gift the Premium subscription.
-2. Run the script:
-   ```
+The tool runs as a Flask server, which responds to incoming API requests to commence the gifting operation.
+
+To start the server:
+   ```bash
    python main.py
    ```
 
-## Note
+When you need guidance on how to frame the API requests to the server, please consult `client_request.py`.
 
-Ensure that your Android device is connected, ADB debugging is enabled, and the Tonkeeper app is open.
+## Important Reminders
+
+Before deploying the server:
+- Confirm that the Android device is connected and recognized.
+- Ensure that ADB debugging is active on the device.
+- Ensure that the Tonkeeper app is operational and logged in.
