@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 from ppadb.client import Client as AdbClient
 
 
@@ -7,13 +9,20 @@ class AdbAutomation:
     """
 
     def __init__(self, host="127.0.0.1", port=5037):
+        # Load the .env file and get the DEVICE_ID
+        load_dotenv()
+        device_id = os.getenv("DEVICE_ID")
+
+        if device_id is None:
+            raise ValueError("DEVICE_ID not found in .env file")
+
         client = AdbClient(host=host, port=port)
-        devices = client.devices()
+        device = client.device(device_id)
 
-        if not devices:
-            raise Exception("No devices found")
+        if device is None:
+            raise Exception(f"No device found with ID {device_id}")
 
-        self.device = devices[0]
+        self.device = device
 
     def tap(self, x, y):
         """

@@ -32,19 +32,23 @@ Before running the application, you need to set up your environment variables. T
 
 ### Setting Up Environment Variables
 
-1. **Using `.env.example`:** We provide a `.env.example` file to showcase what environment variables need to be defined. This file contains dummy values and serves as a template.
+1. **Using `.env.example`:** An `.env.example` file is provided to showcase what environment variables need to be defined. This file contains dummy values and serves as a template.
    
    Example `.env.example` file:
    ```plaintext
    API_KEY=YOUR_ACTUAL_SECRET_API_KEY
+   DEVICE_ID=YOUR_ACTUAL_DEVICE_ID
    ```
    
-2. **Creating `.env`:** Duplicate `.env.example` and rename it to `.env`. Replace `YOUR_ACTUAL_SECRET_API_KEY` with your real API key.
+2. **Creating `.env`:** Duplicate `.env.example` and rename it to `.env`. Replace `YOUR_ACTUAL_SECRET_API_KEY` and `YOUR_ACTUAL_DEVICE_ID` with your real API key and device ID, respectively.
    
    Example `.env` file:
    ```plaintext
    API_KEY=abcdefgh1234567890ijklmnopqrstuv
+   DEVICE_ID=123456789ABCDEF0
    ```
+
+Be sure to replace `YOUR_ACTUAL_SECRET_API_KEY` and `YOUR_ACTUAL_DEVICE_ID` with actual values. The `API_KEY` is a placeholder for any API keys that your application may require, while `DEVICE_ID` is used by the `AdbAutomation` class to specify which Android device to communicate with through ADB.
 
 ### Using the API Key
 
