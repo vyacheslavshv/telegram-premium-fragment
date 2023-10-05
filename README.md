@@ -9,17 +9,6 @@ This documentation provides instructions for setting up and running the Telegram
 - An Android device with ADB debugging enabled
 - The Tonkeeper application installed and active on the device
 
-## Project Files
-
-```
-- adb_utils.py          : Contains utility functions for ADB interactions.
-- client_request.py     : Demonstrates the correct method to structure client requests to the server.
-- main.py               : The central server script.
-- telegram_gifting.py   : Handles the automation of the gifting process.
-- requirements.txt      : Specifies required Python packages.
-- README.md             : This documentation file.
-```
-
 ## Installation
 
 1. Clone the repository:
@@ -36,6 +25,35 @@ This documentation provides instructions for setting up and running the Telegram
    ```bash
    pip install -r requirements.txt
    ```
+
+## Configuration and Environment Variables
+
+Before running the application, you need to set up your environment variables. These variables store your configuration settings, ensuring your setup is secure and transferable.
+
+### Setting Up Environment Variables
+
+1. **Using `.env.example`:** We provide a `.env.example` file to showcase what environment variables need to be defined. This file contains dummy values and serves as a template.
+   
+   Example `.env.example` file:
+   ```plaintext
+   API_KEY=YOUR_ACTUAL_SECRET_API_KEY
+   ```
+   
+2. **Creating `.env`:** Duplicate `.env.example` and rename it to `.env`. Replace `YOUR_ACTUAL_SECRET_API_KEY` with your real API key.
+   
+   Example `.env` file:
+   ```plaintext
+   API_KEY=abcdefgh1234567890ijklmnopqrstuv
+   ```
+
+### Using the API Key
+
+The API key stored in your `.env` file is used to authenticate requests to your API. Ensure you include it in your requests as a header.
+
+Example Request Header:
+```plaintext
+x-api-key: abcdefgh1234567890ijklmnopqrstuv
+```
 
 ## Usage
 

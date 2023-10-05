@@ -1,11 +1,14 @@
+import threading
+import queue
+import os
 from flask import Flask, request, jsonify
 from adb_utils import AdbAutomation
 from telegram_gifting import gift_premium
-import threading
-import queue
+from dotenv import load_dotenv
 
 app = Flask(__name__)
-API_KEY = "YOU_API_KEY"
+load_dotenv()
+API_KEY = os.getenv("API_KEY")
 task_queue = queue.Queue()
 
 

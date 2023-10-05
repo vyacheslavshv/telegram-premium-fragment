@@ -32,3 +32,13 @@ class AdbAutomation:
         Simulates the pressing of a key event.
         """
         self.device.shell(f"input keyevent {keyevent_code}")
+
+    def start_app(self, package_name, activity_name=None):
+        """
+        Starts an app using its package name and activity name.
+        """
+        if activity_name:
+            self.device.shell(f"am start -n {package_name}/{activity_name}")
+        else:
+            self.device.shell(f"am start -a android.intent.action.MAIN -n {package_name}")
+

@@ -42,9 +42,27 @@ def gift_premium(automation, username):
     sleep(3)
 
     # Tap on "Confirm"
-    automation.tap(SCREEN_WIDTH * 0.25, SCREEN_HEIGHT * 0.9)
+    automation.tap(SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.95)
+    sleep(3)
+
+    # Tap on "Passcode"
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
+    sleep(0.5)
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
+    sleep(0.5)
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
+    sleep(0.5)
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
+    sleep(7)
+
+    # Open "Tonkeeper" again
+    automation.start_app("com.ton_keeper", ".TonkeeperActivity")
+    sleep(25)
+
+    # Tap on "Send another gift"
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.75)
     sleep(2)
 
-    # Temporary tap for return
+    # Tap for return
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
     sleep(1)
