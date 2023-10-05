@@ -10,16 +10,16 @@ def gift_premium(automation, username):
     """
 
     # Tap on the cancel cross
-    automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT / 2 - 100)
+    automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
     sleep(1)
 
     # Tap to enter username
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 - 100)
-    sleep(0.5)
+    automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
+    sleep(1)
 
     # Insert username
     automation.input_text(username)
-    sleep(0.5)
+    sleep(1)
 
     # Confirm username
     automation.press_keyevent(66)
@@ -27,7 +27,7 @@ def gift_premium(automation, username):
 
     # Tap on "3 month"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.7)
-    sleep(0.5)
+    sleep(1)
 
     # Tap on "Gift Telegram Premium"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76)
@@ -42,25 +42,25 @@ def gift_premium(automation, username):
     sleep(3)
 
     # Tap on "Confirm"
-    automation.tap(SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.95)
+    automation.tap(SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9)
     sleep(3)
 
     # Tap on "Passcode"
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(0.5)
+    sleep(1)
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(0.5)
+    sleep(1)
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(0.5)
+    sleep(1)
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
     sleep(7)
 
     # Open "Tonkeeper" again
     automation.start_app("com.ton_keeper", ".TonkeeperActivity")
-    sleep(25)
+    sleep(30)
 
     # Tap on "Send another gift"
-    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.75)
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7)
     sleep(2)
 
     # Tap for return
