@@ -85,7 +85,7 @@ def gift_premium(automation, username):
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9)
     sleep(2)
 
-    wait_for_correct_screen(automation, "Buy Premium with Tonkeeper")
+    wait_for_correct_screen(automation, "Scan the QR code")
 
     # Tap on "Buy Premium with Tonkeeper"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85)
