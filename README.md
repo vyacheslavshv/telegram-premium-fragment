@@ -79,7 +79,7 @@ To start the server:
    python main.py
    ```
 
-When you need guidance on how to frame the API requests to the server, please consult `client_request.py`.
+When you need guidance on how to frame the API requests to the server, please consult `client_request.py.example`.
 
 ## Important Reminders
 
