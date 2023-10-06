@@ -26,6 +26,17 @@ This documentation provides instructions for setting up and running the Telegram
    pip install -r requirements.txt
    ```
 
+4. **Install Tesseract:** The project relies on Tesseract for OCR capabilities. Install it according to your operating system:
+
+   - **Mac:**
+     ```bash
+     brew install tesseract
+     ```
+   - **Linux:**
+     ```bash
+     sudo apt install tesseract-ocr
+     ```
+
 ## Configuration and Environment Variables
 
 Before running the application, you need to set up your environment variables. These variables store your configuration settings, ensuring your setup is secure and transferable.
@@ -76,3 +87,4 @@ Before deploying the server:
 - Confirm that the Android device is connected and recognized.
 - Ensure that ADB debugging is active on the device.
 - Ensure that the Tonkeeper app is operational and logged in.
+- Ensure that you have enough Ton to make payments.

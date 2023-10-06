@@ -1,13 +1,55 @@
+import pytesseract
 from time import sleep
+from PIL import Image
+from io import BytesIO
+from fuzzywuzzy import fuzz
 
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 2220
 
 
+def take_screenshot(device):
+    image_data = device.screencap()
+    return Image.open(BytesIO(image_data))
+
+
+def get_screen_text(image):
+    return pytesseract.image_to_string(image)
+
+
+def is_desired_screen(image, expected_text, similarity_threshold=90):
+    screen_text = get_screen_text(image)
+    similarity = fuzz.partial_ratio(screen_text, expected_text)
+    return similarity >= similarity_threshold
+
+
+def wait_for_correct_screen(automation, expected_text):
+    message_displayed = False
+    while True:
+        # Take a screenshot
+        screenshot = take_screenshot(automation.device)
+
+        # Check if it's the desired screen
+        if is_desired_screen(screenshot, expected_text):
+            if message_displayed:
+                print("\033[92mSuccessfully found the desired screen: '{}'\033[0m".format(expected_text))
+            break
+
+        if not message_displayed:
+            print(f"We are not on the '{expected_text}' screen, trying again...")
+            print(f"Please take a screenshot of the current screen for later debugging")
+            message_displayed = True
+
+        sleep(2)
+
+
 def gift_premium(automation, username):
     """
-    Gifts a premium subsctiption to a specified Telegram username.
+    Gifts a premium subscription to a specified Telegram username.
     """
+
+    # Ensure we're on the right screen before proceeding
+    wait_for_correct_screen(automation, "Buy Telegram Premium")
 
     # Tap on the cancel cross
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
