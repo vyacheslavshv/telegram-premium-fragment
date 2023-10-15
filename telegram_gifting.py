@@ -91,7 +91,7 @@ def gift_premium(automation, username):
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85)
     sleep(3)
 
-    wait_for_correct_screen(automation, "TON Transfer")
+    wait_for_correct_screen(automation, "Telegram Premium for 3 months")
 
     # Tap on "Confirm"
     automation.tap(SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9)
