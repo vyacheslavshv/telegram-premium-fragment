@@ -23,7 +23,7 @@ def is_desired_screen(image, expected_text, similarity_threshold=90):
     return similarity >= similarity_threshold
 
 
-def wait_for_correct_screen(automation, expected_text):
+def wait_for_correct_screen(automation, expected_text, msg=True):
     message_displayed = False
     while True:
         # Take a screenshot
@@ -31,12 +31,12 @@ def wait_for_correct_screen(automation, expected_text):
 
         # Check if it's the desired screen
         if is_desired_screen(screenshot, expected_text):
-            if message_displayed:
+            if message_displayed and msg:
                 print("\033[92mSuccessfully found the desired screen: '{}'\033[0m".format(expected_text))
             break
 
-        if not message_displayed:
-            print(f"We are not on the '{expected_text}' screen, trying again...")
+        if not message_displayed and msg:
+            print(f"Waiting for the '{expected_text}' screen to appear...")
             message_displayed = True
 
         sleep(2)
@@ -52,11 +52,11 @@ def gift_premium(automation, username):
 
     # Tap on the cancel cross
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
-    sleep(1)
+    sleep(0.5)
 
     # Tap on the cancel cross again
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
-    sleep(1)
+    sleep(0.5)
 
     # Tap to enter username
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
@@ -88,29 +88,31 @@ def gift_premium(automation, username):
 
     # Tap on "Buy Premium with Tonkeeper"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85)
-    sleep(3)
+    sleep(2)
 
     wait_for_correct_screen(automation, "Telegram Premium for 3 months")
 
     # Tap on "Confirm"
     automation.tap(SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9)
-    sleep(3)
+    sleep(2)
+
+    wait_for_correct_screen(automation, "Enter passcode")
 
     # Tap on "Passcode"
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(1)
+    sleep(0.5)
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(1)
+    sleep(0.5)
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(1)
+    sleep(0.5)
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
     sleep(7)
 
     # Open "Tonkeeper" again
     automation.start_app("com.ton_keeper", ".TonkeeperActivity")
-    sleep(5)
+    sleep(2)
 
-    wait_for_correct_screen(automation, "Gift Sent!")
+    wait_for_correct_screen(automation, "Gift Sent!", msg=False)
 
     # Tap on "Send another gift"
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7)
