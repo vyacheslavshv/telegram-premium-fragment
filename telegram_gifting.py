@@ -37,7 +37,6 @@ def wait_for_correct_screen(automation, expected_text):
 
         if not message_displayed:
             print(f"We are not on the '{expected_text}' screen, trying again...")
-            print(f"Please take a screenshot of the current screen for later debugging")
             message_displayed = True
 
         sleep(2)
@@ -53,11 +52,11 @@ def gift_premium(automation, username):
 
     # Tap on the cancel cross
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
-    sleep(0.5)
+    sleep(1)
 
     # Tap on the cancel cross again
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
-    sleep(0.5)
+    sleep(1)
 
     # Tap to enter username
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
@@ -109,9 +108,9 @@ def gift_premium(automation, username):
 
     # Open "Tonkeeper" again
     automation.start_app("com.ton_keeper", ".TonkeeperActivity")
-    sleep(20)
+    sleep(5)
 
-    wait_for_correct_screen(automation, "Send another gift")
+    wait_for_correct_screen(automation, "Gift Sent!")
 
     # Tap on "Send another gift"
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7)
