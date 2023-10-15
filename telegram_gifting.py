@@ -76,7 +76,7 @@ def gift_premium(automation, username):
 
     # Tap on "Gift Telegram Premium"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76)
-    sleep(2)
+    sleep(3)
 
     wait_for_correct_screen(automation, "Gift Telegram Premium")
 
@@ -106,7 +106,7 @@ def gift_premium(automation, username):
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
     sleep(0.5)
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(7)
+    sleep(12)
 
     # Open "Tonkeeper" again
     automation.start_app("com.ton_keeper", ".TonkeeperActivity")
