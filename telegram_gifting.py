@@ -36,16 +36,14 @@ def gift_premium(automation, username):
     automation.press_keyevent(66)
     sleep(1)
 
-    # Take a screenshot to check if "No Telegram users found." or
-    # "This account is already subscribed to Telegram Premium." is displayed
+    # Take a screenshot to check for specific messages
     screenshot = take_screenshot(automation.device)
-    screen_text = get_screen_text(screenshot)
 
-    if "No Telegram users found." in screen_text:
+    if is_desired_screen(screenshot, "No Telegram users found."):
         print(f"Skipping: No Telegram users found for username {username}")
         return
 
-    if "This account is already subscribed to Telegram Premium." in screen_text:
+    if is_desired_screen(screenshot, "This account is already subscribed to Telegram Premium."):
         print(f"Skipping: The account {username} is already subscribed to Telegram Premium.")
         return
 
