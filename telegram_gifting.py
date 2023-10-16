@@ -8,40 +8,6 @@ SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 2220
 
 
-def take_screenshot(device):
-    image_data = device.screencap()
-    return Image.open(BytesIO(image_data))
-
-
-def get_screen_text(image):
-    return pytesseract.image_to_string(image)
-
-
-def is_desired_screen(image, expected_text, similarity_threshold=90):
-    screen_text = get_screen_text(image)
-    similarity = fuzz.partial_ratio(screen_text, expected_text)
-    return similarity >= similarity_threshold
-
-
-def wait_for_correct_screen(automation, expected_text, msg=True):
-    message_displayed = False
-    while True:
-        # Take a screenshot
-        screenshot = take_screenshot(automation.device)
-
-        # Check if it's the desired screen
-        if is_desired_screen(screenshot, expected_text):
-            if message_displayed and msg:
-                print("\033[92mSuccessfully found the desired screen: '{}'\033[0m".format(expected_text))
-            break
-
-        if not message_displayed and msg:
-            print(f"Waiting for the '{expected_text}' screen to appear...")
-            message_displayed = True
-
-        sleep(2)
-
-
 def gift_premium(automation, username):
     """
     Gifts a premium subscription to a specified Telegram username.
@@ -69,6 +35,19 @@ def gift_premium(automation, username):
     # Confirm username
     automation.press_keyevent(66)
     sleep(1)
+
+    # Take a screenshot to check if "No Telegram users found." or
+    # "This account is already subscribed to Telegram Premium." is displayed
+    screenshot = take_screenshot(automation.device)
+    screen_text = get_screen_text(screenshot)
+
+    if "No Telegram users found." in screen_text:
+        print(f"Skipping: No Telegram users found for username {username}")
+        return
+
+    if "This account is already subscribed to Telegram Premium." in screen_text:
+        print(f"Skipping: The account {username} is already subscribed to Telegram Premium.")
+        return
 
     # Tap on "3 month"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.7)
@@ -121,3 +100,37 @@ def gift_premium(automation, username):
     # Tap for return
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
     sleep(1)
+
+
+def wait_for_correct_screen(automation, expected_text, msg=True):
+    message_displayed = False
+    while True:
+        # Take a screenshot
+        screenshot = take_screenshot(automation.device)
+
+        # Check if it's the desired screen
+        if is_desired_screen(screenshot, expected_text):
+            if message_displayed and msg:
+                print("\033[92mSuccessfully found the desired screen: '{}'\033[0m".format(expected_text))
+            break
+
+        if not message_displayed and msg:
+            print(f"Waiting for the '{expected_text}' screen to appear...")
+            message_displayed = True
+
+        sleep(2)
+
+
+def take_screenshot(device):
+    image_data = device.screencap()
+    return Image.open(BytesIO(image_data))
+
+
+def get_screen_text(image):
+    return pytesseract.image_to_string(image)
+
+
+def is_desired_screen(image, expected_text, similarity_threshold=90):
+    screen_text = get_screen_text(image)
+    similarity = fuzz.partial_ratio(screen_text, expected_text)
+    return similarity >= similarity_threshold
