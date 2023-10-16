@@ -14,15 +14,12 @@ def gift_premium(automation, username):
     """
 
     # Ensure we're on the right screen before proceeding
-    wait_for_correct_screen(automation, "Buy Telegram Premium")
+    wait_for_correct_screen(automation, "Buy Telegram Premium", infinite_wait=True)
 
     # Tap on the cancel cross
-    automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
-    sleep(0.5)
-
-    # Tap on the cancel cross again
-    automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
-    sleep(0.5)
+    for _ in range(2):
+        automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
+        sleep(0.5)
 
     # Tap to enter username
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
@@ -55,41 +52,47 @@ def gift_premium(automation, username):
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76)
     sleep(3)
 
-    wait_for_correct_screen(automation, "Gift Telegram Premium")
+    if not wait_for_correct_screen(automation, "Gift Telegram Premium"):
+        handle_failure(automation)
+        return
 
     # Tap on "Buy Gift for {username}"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9)
     sleep(2)
 
-    wait_for_correct_screen(automation, "Scan the QR code")
+    if not wait_for_correct_screen(automation, "Scan the QR code"):
+        handle_failure(automation)
+        return
 
     # Tap on "Buy Premium with Tonkeeper"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85)
     sleep(2)
 
-    wait_for_correct_screen(automation, "Telegram Premium for 3 months")
+    if not wait_for_correct_screen(automation, "Confirm action"):
+        handle_failure(automation)
+        return
 
     # Tap on "Confirm"
     automation.tap(SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9)
     sleep(2)
 
-    wait_for_correct_screen(automation, "Enter passcode")
+    if not wait_for_correct_screen(automation, "Enter passcode"):
+        handle_failure(automation)
+        return
 
     # Tap on "Passcode"
-    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(0.5)
-    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(0.5)
-    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
-    sleep(0.5)
-    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
+    for _ in range(4):
+        automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
+        sleep(0.5)
     sleep(12)
 
     # Open "Tonkeeper" again
     automation.start_app("com.ton_keeper", ".TonkeeperActivity")
     sleep(2)
 
-    wait_for_correct_screen(automation, "Gift Sent!", msg=False)
+    if not wait_for_correct_screen(automation, "Gift Sent!", msg=False):
+        handle_failure(automation)
+        return
 
     # Tap on "Send another gift"
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7)
@@ -100,9 +103,12 @@ def gift_premium(automation, username):
     sleep(1)
 
 
-def wait_for_correct_screen(automation, expected_text, msg=True):
+def wait_for_correct_screen(automation, expected_text, msg=True, infinite_wait=False):
     message_displayed = False
+    iteration_count = 0
     while True:
+        iteration_count += 1
+
         # Take a screenshot
         screenshot = take_screenshot(automation.device)
 
@@ -110,13 +116,33 @@ def wait_for_correct_screen(automation, expected_text, msg=True):
         if is_desired_screen(screenshot, expected_text):
             if message_displayed and msg:
                 print("\033[92mSuccessfully found the desired screen: '{}'\033[0m".format(expected_text))
-            break
+            return True  # Successfully found the screen
+
+        if iteration_count > 50 and not infinite_wait:
+            print(f"Failed to find the '{expected_text}' screen within 100 seconds.")
+            return False  # Unsuccessfully found the screen
 
         if not message_displayed and msg:
             print(f"Waiting for the '{expected_text}' screen to appear...")
             message_displayed = True
 
         sleep(2)
+
+
+def handle_failure(automation):
+    # Open "Tonkeeper" again
+    automation.start_app("com.ton_keeper", ".TonkeeperActivity")
+    sleep(2)
+
+    # Tap for return
+    for _ in range(3):
+        automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
+        sleep(1)
+
+    # Tap on reload
+    for _ in range(2):
+        automation.tap(SCREEN_WIDTH * 0.77, SCREEN_HEIGHT * 0.07)
+        sleep(1)
 
 
 def take_screenshot(device):
