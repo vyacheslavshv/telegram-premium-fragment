@@ -91,6 +91,7 @@ def gift_premium(automation, username):
     sleep(2)
 
     if not wait_for_correct_screen(automation, "Gift Sent!", msg=False):
+        save_successful_username(username)
         handle_failure(automation)
         return
 
@@ -101,6 +102,8 @@ def gift_premium(automation, username):
     # Tap for return
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
     sleep(1)
+
+    save_successful_username(username)
 
 
 def wait_for_correct_screen(automation, expected_text, msg=True, infinite_wait=False):
@@ -158,3 +161,8 @@ def is_desired_screen(image, expected_text, similarity_threshold=90):
     screen_text = get_screen_text(image)
     similarity = fuzz.partial_ratio(screen_text, expected_text)
     return similarity >= similarity_threshold
+
+
+def save_successful_username(username, filename="successful_usernames.txt"):
+    with open(filename, "a") as f:
+        f.write(username + "\n")
