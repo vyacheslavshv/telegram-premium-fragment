@@ -23,15 +23,15 @@ def gift_premium(automation, username):
 
     # Tap to enter username
     automation.tap(SCREEN_WIDTH * 0.95, SCREEN_HEIGHT * 0.4)
-    sleep(1)
+    sleep(0.7)
 
     # Insert username
     automation.input_text(username)
-    sleep(1)
+    sleep(0.7)
 
     # Confirm username
     automation.press_keyevent(66)
-    sleep(1)
+    sleep(0.7)
 
     # Take a screenshot to check for specific messages
     screenshot = take_screenshot(automation.device)
@@ -46,7 +46,7 @@ def gift_premium(automation, username):
 
     # Tap on "3 month"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.7)
-    sleep(1)
+    sleep(0.7)
 
     # Tap on "Gift Telegram Premium"
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76)
@@ -84,7 +84,7 @@ def gift_premium(automation, username):
     for _ in range(4):
         automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
         sleep(0.5)
-    sleep(12)
+    sleep(10)
 
     # Open "Tonkeeper" again
     automation.start_app("com.ton_keeper", ".TonkeeperActivity")
@@ -101,7 +101,6 @@ def gift_premium(automation, username):
 
     # Tap for return
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
-    sleep(1)
 
     save_successful_username(username)
 
@@ -119,6 +118,7 @@ def wait_for_correct_screen(automation, expected_text, msg=True, infinite_wait=F
         if is_desired_screen(screenshot, expected_text):
             if message_displayed and msg:
                 print("\033[92mSuccessfully found the desired screen: '{}'\033[0m".format(expected_text))
+            sleep(0.5)
             return True  # Successfully found the screen
 
         if iteration_count > 50 and not infinite_wait:
@@ -129,7 +129,7 @@ def wait_for_correct_screen(automation, expected_text, msg=True, infinite_wait=F
             print(f"Waiting for the '{expected_text}' screen to appear...")
             message_displayed = True
 
-        sleep(2)
+        sleep(1)
 
 
 def handle_failure(automation):
