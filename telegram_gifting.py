@@ -92,7 +92,6 @@ def gift_premium(automation, username):
     sleep(2)
 
     if not wait_for_correct_screen(automation, "Gift Sent!", msg=False):
-        save_successful_username(username)
         handle_failure(automation)
         return
 
