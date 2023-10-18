@@ -14,7 +14,8 @@ def gift_premium(automation, username):
     """
 
     # Ensure we're on the right screen before proceeding
-    wait_for_correct_screen(automation, "Buy Telegram Premium", infinite_wait=True)
+    while not wait_for_correct_screen(automation, "Buy Telegram Premium"):
+        handle_failure(automation)
 
     # Tap on the cancel cross
     for _ in range(2):
@@ -105,7 +106,7 @@ def gift_premium(automation, username):
     save_successful_username(username)
 
 
-def wait_for_correct_screen(automation, expected_text, msg=True, infinite_wait=False):
+def wait_for_correct_screen(automation, expected_text, msg=True):
     message_displayed = False
     iteration_count = 0
     while True:
@@ -119,11 +120,11 @@ def wait_for_correct_screen(automation, expected_text, msg=True, infinite_wait=F
             if message_displayed and msg:
                 print("\033[92mSuccessfully found the desired screen: '{}'\033[0m".format(expected_text))
             sleep(0.5)
-            return True  # Successfully found the screen
+            return True
 
-        if iteration_count > 50 and not infinite_wait:
+        if iteration_count > 50:
             print(f"Failed to find the '{expected_text}' screen within 100 seconds.")
-            return False  # Unsuccessfully found the screen
+            return False
 
         if not message_displayed and msg:
             print(f"Waiting for the '{expected_text}' screen to appear...")
