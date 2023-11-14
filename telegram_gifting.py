@@ -45,8 +45,8 @@ def gift_premium(automation, username):
         print(f"Skipping: The account {username} is already subscribed to Telegram Premium.")
         return
 
-    # Tap on "3 month"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.65)
+    # Tap on "6 month"
+    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.6)
     sleep(0.7)
 
     # Tap on "Gift Telegram Premium"
