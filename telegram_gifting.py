@@ -88,7 +88,7 @@ def gift_premium(automation, username):
     sleep(10)
 
     # Open "Tonkeeper" again
-    automation.start_app("com.ton_keeper", ".TonkeeperActivity")
+    automation.start_app("com.ton_keeper", ".MainActivity")
     sleep(2)
 
     if not wait_for_correct_screen(automation, "Gift Sent!", msg=False):
