@@ -46,7 +46,7 @@ def gift_premium(automation, username):
         return
 
     # Tap on "3 month"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.7)
+    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.65)
     sleep(0.7)
 
     # Tap on "Gift Telegram Premium"
@@ -99,6 +99,14 @@ def gift_premium(automation, username):
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7)
     sleep(2)
 
+    if not wait_for_correct_screen(automation, "Premium Giveaways"):
+        handle_failure(automation)
+        return
+
+    # Tap on "Buy Premium for a User"
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
+    sleep(2)
+
     # Tap for return
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
 
@@ -146,6 +154,10 @@ def handle_failure(automation):
     for _ in range(2):
         automation.tap(SCREEN_WIDTH * 0.77, SCREEN_HEIGHT * 0.07)
         sleep(1)
+
+    # Tap on "Buy Premium for a User"
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
+    sleep(2)
 
 
 def take_screenshot(device):
