@@ -126,7 +126,7 @@ def wait_for_correct_screen(automation, expected_text, msg=True):
         if is_desired_screen(screenshot, expected_text):
             if message_displayed and msg:
                 print("\033[92mSuccessfully found the desired screen: '{}'\033[0m".format(expected_text))
-            sleep(0.5)
+            sleep(1)
             return True
 
         if iteration_count > 50:
