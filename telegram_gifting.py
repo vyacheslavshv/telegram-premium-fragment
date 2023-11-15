@@ -142,7 +142,7 @@ def wait_for_correct_screen(automation, expected_text, msg=True):
 
 def handle_failure(automation):
     # Open "Tonkeeper" again
-    automation.start_app("com.ton_keeper", ".TonkeeperActivity")
+    automation.start_app("com.ton_keeper", ".MainActivity")
     sleep(2)
 
     # Tap for return
