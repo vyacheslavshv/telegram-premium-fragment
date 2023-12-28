@@ -46,38 +46,39 @@ def gift_premium(automation, username):
         return
 
     # Tap on "6 month"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.6)
-    sleep(0.7)
+    for _ in range(2):
+        automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.6)
+        sleep(0.35)
 
     # Tap on "Gift Telegram Premium"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76)
-    sleep(3)
-
-    if not wait_for_correct_screen(automation, "Gift Telegram Premium"):
+    if not tap_and_verify(
+            automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76,
+            "Gift Telegram Premium", 3
+    ):
         handle_failure(automation)
         return
 
     # Tap on "Buy Gift for {username}"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9)
-    sleep(2)
-
-    if not wait_for_correct_screen(automation, "Scan the QR code"):
+    if not tap_and_verify(
+            automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9,
+            "Scan the QR code", 2
+    ):
         handle_failure(automation)
         return
 
     # Tap on "Buy Premium with Tonkeeper"
-    automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85)
-    sleep(2)
-
-    if not wait_for_correct_screen(automation, "Confirm action"):
+    if not tap_and_verify(
+            automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85,
+            "Confirm action", 2
+    ):
         handle_failure(automation)
         return
 
     # Tap on "Confirm"
-    automation.tap(SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9)
-    sleep(2)
-
-    if not wait_for_correct_screen(automation, "Enter passcode"):
+    if not tap_and_verify(
+            automation, SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9,
+            "Enter passcode", 2
+    ):
         handle_failure(automation)
         return
 
@@ -96,16 +97,17 @@ def gift_premium(automation, username):
         return
 
     # Tap on "Send another gift"
-    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7)
-    sleep(2)
-
-    if not wait_for_correct_screen(automation, "Premium Giveaways"):
+    if not tap_and_verify(
+            automation, SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7,
+            "Premium Giveaways", 2
+    ):
         handle_failure(automation)
         return
 
     # Tap on "Buy Premium for a User"
-    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
-    sleep(2)
+    for _ in range(2):
+        automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
+        sleep(1)
 
     # Tap for return
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
@@ -158,6 +160,21 @@ def handle_failure(automation):
     # Tap on "Buy Premium for a User"
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
     sleep(2)
+
+
+def tap_and_verify(automation, x, y, expected_screen, wait_time=1, retry_limit=3):
+    """
+    Attempts to tap on a coordinate and verify if the expected screen is reached.
+    Retries a limited number of times if unsuccessful.
+    """
+    for attempt in range(retry_limit):
+        automation.tap(x, y)
+        sleep(wait_time)
+
+        if wait_for_correct_screen(automation, expected_screen, msg=False):
+            return True
+
+    return False
 
 
 def take_screenshot(device):
