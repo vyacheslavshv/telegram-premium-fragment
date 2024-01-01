@@ -115,7 +115,7 @@ def gift_premium(automation, username):
     save_successful_username(username)
 
 
-def wait_for_correct_screen(automation, expected_text, msg=True):
+def wait_for_correct_screen(automation, expected_text, msg=True, iterations=50):
     message_displayed = False
     iteration_count = 0
     while True:
@@ -131,8 +131,8 @@ def wait_for_correct_screen(automation, expected_text, msg=True):
             sleep(1)
             return True
 
-        if iteration_count > 50:
-            print(f"Failed to find the '{expected_text}' screen within 100 seconds.")
+        if iteration_count > iterations:
+            print(f"Failed to find the '{expected_text}' screen within {iterations*2} seconds.")
             return False
 
         if not message_displayed and msg:
@@ -171,7 +171,7 @@ def tap_and_verify(automation, x, y, expected_screen, wait_time=1, retry_limit=3
         automation.tap(x, y)
         sleep(wait_time)
 
-        if wait_for_correct_screen(automation, expected_screen, msg=False):
+        if wait_for_correct_screen(automation, expected_screen, msg=False, iterations=10):
             return True
 
     return False
