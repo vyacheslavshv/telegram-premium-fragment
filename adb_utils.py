@@ -20,13 +20,15 @@ class AdbAutomation:
         if self.device_id is None:
             raise ValueError("DEVICE_ID not found in .env file")
 
-    def run(self, command):
+    def run(self, command, text=True):
         """
         Executes an ADB command on the specified device.
         """
         try:
-            subprocess.run(f"adb -s {self.device_id} shell {command}",
-                           capture_output=True, text=True, shell=True)
+            result = subprocess.run(
+                f"adb -s {self.device_id} shell {command}",
+                capture_output=True, text=text, shell=True)
+            return result
         except Exception as e:
             print(f"Error running command: {command}, error message: {e}")
 
@@ -74,7 +76,7 @@ class AdbAutomation:
         Captures a screenshot from the specified Android device and returns it as a PIL image.
         """
         try:
-            result = subprocess.run(f"screencap -p")
+            result = self.run(f"screencap -p", text=False)
             image_data = BytesIO(result.stdout)
             image = Image.open(image_data)
 
