@@ -1,7 +1,5 @@
 import pytesseract
 from time import sleep
-from PIL import Image
-from io import BytesIO
 from fuzzywuzzy import fuzz
 
 SCREEN_WIDTH = 1080
@@ -35,7 +33,7 @@ def gift_premium(automation, username):
     sleep(0.7)
 
     # Take a screenshot to check for specific messages
-    screenshot = take_screenshot(automation.device)
+    screenshot = automation.take_screenshot()
 
     if is_desired_screen(screenshot, "No Telegram users found."):
         print(f"Skipping: No Telegram users found for username {username}")
@@ -122,7 +120,7 @@ def wait_for_correct_screen(automation, expected_text, msg=True, iterations=50):
         iteration_count += 1
 
         # Take a screenshot
-        screenshot = take_screenshot(automation.device)
+        screenshot = automation.take_screenshot()
 
         # Check if it's the desired screen
         if is_desired_screen(screenshot, expected_text):
@@ -175,11 +173,6 @@ def tap_and_verify(automation, x, y, expected_screen, wait_time=1, retry_limit=3
             return True
 
     return False
-
-
-def take_screenshot(device):
-    image_data = device.screencap()
-    return Image.open(BytesIO(image_data))
 
 
 def get_screen_text(image):

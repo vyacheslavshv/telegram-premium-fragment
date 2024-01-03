@@ -1,6 +1,8 @@
 import os
-from dotenv import load_dotenv
 import subprocess
+from dotenv import load_dotenv
+from PIL import Image
+from io import BytesIO
 
 
 class AdbAutomation:
@@ -66,3 +68,17 @@ class AdbAutomation:
                 self.run(f"am start -a android.intent.action.MAIN -n {package_name}")
         except Exception as e:
             print(f"Error while starting an app, error message: {e}")
+
+    def take_screenshot(self):
+        """
+        Captures a screenshot from the specified Android device and returns it as a PIL image.
+        """
+        try:
+            result = subprocess.run(f"adb -s {self.device_id} exec-out screencap -p",
+                                    capture_output=True, shell=True)
+            image_data = BytesIO(result.stdout)
+            image = Image.open(image_data)
+
+            return image
+        except Exception as e:
+            print(f"Error capturing screenshot: {e}")
