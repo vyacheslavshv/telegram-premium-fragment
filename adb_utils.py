@@ -77,7 +77,7 @@ class AdbAutomation:
         """
         try:
             result = self.run(f"screencap -p", text=False)
-            image_data = BytesIO(result.stdout)
+            image_data = result.stdout.replace(b'\r\r\n', b'\n')
             image = Image.open(image_data)
 
             return image
