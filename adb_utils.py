@@ -8,7 +8,7 @@ class AdbAutomation:
     A class to abstract the interactions with an Android device using ADB.
     """
 
-    def __init__(self, host="127.0.0.1", port=5037):
+    def __init__(self, host="localhost", port=5038):
         # Load the .env file and get the DEVICE_ID
         load_dotenv()
         device_id = os.getenv("DEVICE_ID")
@@ -28,26 +28,37 @@ class AdbAutomation:
         """
         Simulates a tap on the device screen at coordinates (x, y).
         """
-        self.device.shell(f"input tap {x} {y}")
+        try:
+            self.device.shell(f"input tap {x} {y}")
+        except Exception as e:
+            print(f"Error taping {x} {y}, error was: {e}")
 
     def input_text(self, text):
         """
         Inputs the specified text into the active field on the device.
         """
-        self.device.shell(f"input text {text}")
+        try:
+            self.device.shell(f"input text {text}")
+        except Exception as e:
+            print(f"Error while inputting text: {e}")
 
     def press_keyevent(self, keyevent_code):
         """
         Simulates the pressing of a key event.
         """
-        self.device.shell(f"input keyevent {keyevent_code}")
+        try:
+            self.device.shell(f"input keyevent {keyevent_code}")
+        except Exception as e:
+            print(f"Error while pressing keyevent {keyevent_code}, error was: {e}")
 
     def start_app(self, package_name, activity_name=None):
         """
         Starts an app using its package name and activity name.
         """
-        if activity_name:
-            self.device.shell(f"am start -n {package_name}/{activity_name}")
-        else:
-            self.device.shell(f"am start -a android.intent.action.MAIN -n {package_name}")
-
+        try:
+            if activity_name:
+                self.device.shell(f"am start -n {package_name}/{activity_name}")
+            else:
+                self.device.shell(f"am start -a android.intent.action.MAIN -n {package_name}")
+        except Exception as e:
+            print(f"Error while starting an app, error was: {e}")
