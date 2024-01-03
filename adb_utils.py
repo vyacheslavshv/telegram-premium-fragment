@@ -74,8 +74,7 @@ class AdbAutomation:
         Captures a screenshot from the specified Android device and returns it as a PIL image.
         """
         try:
-            result = subprocess.run(f"adb -s {self.device_id} exec-out screencap -p",
-                                    capture_output=True, shell=True)
+            result = subprocess.run(f"screencap -p")
             image_data = BytesIO(result.stdout)
             image = Image.open(image_data)
 
