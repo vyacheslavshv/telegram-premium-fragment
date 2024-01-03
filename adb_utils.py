@@ -8,7 +8,7 @@ class AdbAutomation:
     A class to abstract the interactions with an Android device using ADB.
     """
 
-    def __init__(self, host="localhost", port=5038):
+    def __init__(self, host="127.0.0.1", port=5038):
         # Load the .env file and get the DEVICE_ID
         load_dotenv()
         device_id = os.getenv("DEVICE_ID")
