@@ -22,7 +22,7 @@ def worker():
             automation = AdbAutomation()
             gift_premium(automation, task)
         except Exception as e:
-            print(f"Error processing task for {task}: {str(e)}")
+            print(f"Error processing task for {task}: {e}")
         task_queue.task_done()
 
 
