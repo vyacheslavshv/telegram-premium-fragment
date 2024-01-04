@@ -90,11 +90,11 @@ def gift_premium(automation, username):
     for _ in range(4):
         automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
         sleep(0.5)
-    sleep(10)
+    sleep(20)
 
     # Open "Tonkeeper" again
     automation.start_app("com.ton_keeper", ".MainActivity")
-    sleep(2)
+    sleep(5)
 
     if not wait_for_correct_screen(automation, "Gift Sent!", msg=False):
         save_unsuccessful_username(username)
