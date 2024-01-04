@@ -30,9 +30,10 @@ def worker(device_id):
 # Create a thread for each device found in the environment variables
 for key in os.environ:
     if key.startswith("DEVICE_"):
-        device_id = os.getenv(key)
-        if device_id:
-            worker_thread = threading.Thread(target=worker, args=(device_id,))
+        device = os.getenv(key)
+        print(device)
+        if device:
+            worker_thread = threading.Thread(target=worker, args=(device,))
             worker_thread.start()
 
 
