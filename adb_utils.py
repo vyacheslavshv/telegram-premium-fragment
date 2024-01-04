@@ -77,12 +77,16 @@ class AdbAutomation:
         while True:
             try:
                 # Save the screenshot to the device's storage
-                subprocess.run(f"adb -s {self.device_id} shell screencap -p /sdcard/{screenshot_name}",
-                               shell=True, check=True)
+                subprocess.run(
+                    f"adb -s {self.device_id} shell screencap -p /sdcard/{screenshot_name}",
+                    shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                )
 
                 # Pull the image to the local machine
-                subprocess.run(f"adb -s {self.device_id} pull /sdcard/{screenshot_name} {local_screenshot_path}",
-                               shell=True, check=True)
+                subprocess.run(
+                    f"adb -s {self.device_id} pull /sdcard/{screenshot_name} {local_screenshot_path}",
+                    shell=True, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+                )
 
                 # Open the image from the local file
                 image = Image.open(local_screenshot_path)
