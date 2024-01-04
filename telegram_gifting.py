@@ -160,6 +160,12 @@ def handle_failure(automation):
         automation.tap(SCREEN_WIDTH * 0.77, SCREEN_HEIGHT * 0.07)
         sleep(1)
 
+    # Tap on "Send another gift"
+    tap_and_verify(
+        automation, SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7,
+        "Premium Giveaways", 2
+    )
+
     # Tap on "Buy Premium for a User"
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
     sleep(2)
