@@ -36,13 +36,13 @@ def gift_premium(automation, username):
     screenshot = automation.take_screenshot()
 
     if is_desired_screen(screenshot, "No Telegram users found."):
-        print(f"Skipping: No Telegram users found for username {username}")
         save_unsuccessful_username(username)
+        print(f"Skipping: No Telegram users found for username {username}")
         return
 
     if is_desired_screen(screenshot, "This account is already subscribed to Telegram Premium."):
-        print(f"Skipping: The account {username} is already subscribed to Telegram Premium.")
         save_unsuccessful_username(username)
+        print(f"Skipping: The account {username} is already subscribed to Telegram Premium.")
         return
 
     # Tap on "6 month"
@@ -82,6 +82,7 @@ def gift_premium(automation, username):
         automation, SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9,
         "Enter passcode", 2
     ):
+        save_unsuccessful_username(username)
         handle_failure(automation)
         return
 

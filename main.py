@@ -3,7 +3,7 @@ import queue
 import os
 from flask import Flask, request, jsonify
 from adb_utils import AdbAutomation
-from telegram_gifting import gift_premium
+from telegram_gifting import gift_premium, save_unsuccessful_username
 from dotenv import load_dotenv
 from time import sleep
 
@@ -15,18 +15,15 @@ task_queue = queue.Queue()
 
 def worker(device_id):
     """Background worker that processes tasks."""
-    try:
-        automation = AdbAutomation(device_id)
-    except Exception as e:
-        print(f"Error connect to device {device_id}: {e}")
-        return
 
+    automation = AdbAutomation(device_id)
     while True:
-        task = task_queue.get()
+        username = task_queue.get()
         try:
-            gift_premium(automation, task)
+            gift_premium(automation, username)
         except Exception as e:
-            print(f"Error processing task for {task}: {e}")
+            save_unsuccessful_username(username)
+            print(f"Error processing task for {username}: {e}")
             sleep(3)
 
         task_queue.task_done()
