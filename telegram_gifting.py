@@ -61,8 +61,8 @@ def gift_premium(automation, username):
 
     # Tap on "Buy Gift for {username}"
     if not tap_and_verify(
-            automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9,
-            "Scan the QR code", 2
+        automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9,
+        "Scan the QR code", 2
     ):
         save_unsuccessful_username(username)
         handle_failure(automation)
@@ -90,11 +90,11 @@ def gift_premium(automation, username):
     for _ in range(4):
         automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.65)
         sleep(0.5)
-    sleep(20)
+    sleep(10)
 
-    # Open "Tonkeeper" again
-    automation.start_app("com.ton_keeper", ".MainActivity")
-    sleep(5)
+    # # Open "Tonkeeper" again
+    # automation.start_app("com.ton_keeper", ".MainActivity")
+    # sleep(5)
 
     if not wait_for_correct_screen(automation, "Gift Sent!", msg=False):
         save_unsuccessful_username(username)
@@ -147,8 +147,8 @@ def wait_for_correct_screen(automation, expected_text, msg=True, iterations=50):
 
 def handle_failure(automation):
     # Open "Tonkeeper" again
-    automation.start_app("com.ton_keeper", ".MainActivity")
-    sleep(2)
+    # automation.start_app("com.ton_keeper", ".MainActivity")
+    # sleep(2)
 
     # Tap for return
     for _ in range(3):
