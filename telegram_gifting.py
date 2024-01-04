@@ -112,7 +112,7 @@ def gift_premium(automation, username):
 
     # Tap on "Buy Premium for a User"
     automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
-    sleep(1)
+    sleep(2)
 
     # Tap for return
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
