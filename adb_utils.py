@@ -1,8 +1,5 @@
-import os
 import subprocess
-from dotenv import load_dotenv
 from PIL import Image
-from io import BytesIO
 from time import sleep
 
 
@@ -13,10 +10,9 @@ class AdbAutomation:
 
     def __init__(self, device_id):
         """
-        Load the .env file and get the DEVICE_ID.
+        Get the DEVICE_ID.
         """
-        load_dotenv()
-        self.device_id = os.getenv(device_id)
+        self.device_id = device_id
 
     def run(self, command, text=True):
         """
