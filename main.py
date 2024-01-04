@@ -15,7 +15,6 @@ task_queue = queue.Queue()
 
 def worker(device_id):
     """Background worker that processes tasks."""
-
     automation = AdbAutomation(device_id)
     while True:
         username = task_queue.get()
@@ -25,13 +24,16 @@ def worker(device_id):
             save_unsuccessful_username(username)
             print(f"Error processing task for {username}: {e}")
             sleep(3)
-
         task_queue.task_done()
 
 
-for device_number in range(2):
-    worker_thread = threading.Thread(target=worker, args=(f'DEVICE_{device_number + 1}',))
-    worker_thread.start()
+# Create a thread for each device found in the environment variables
+for key in os.environ:
+    if key.startswith("DEVICE_"):
+        device_id = os.getenv(key)
+        if device_id:
+            worker_thread = threading.Thread(target=worker, args=(device_id,))
+            worker_thread.start()
 
 
 @app.before_request
