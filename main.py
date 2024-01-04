@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 from adb_utils import AdbAutomation
 from telegram_gifting import gift_premium
 from dotenv import load_dotenv
+from time import sleep
 
 app = Flask(__name__)
 load_dotenv()
@@ -12,27 +13,32 @@ API_KEY = os.getenv("API_KEY")
 task_queue = queue.Queue()
 
 
-def worker():
+def worker(device_id):
     """Background worker that processes tasks."""
+    try:
+        automation = AdbAutomation(device_id)
+    except Exception as e:
+        print(f"Error connect to device {device_id}: {e}")
+        return
+
     while True:
         task = task_queue.get()
-        if task is None:
-            break
-        try:
-            automation = AdbAutomation()
-        except Exception as e:
-            print(f"Automation: Error processing task for {task}: {e}")
-            task_queue.task_done()
-            continue
         try:
             gift_premium(automation, task)
         except Exception as e:
-            print(f"Gift premium: Error processing task for {task}: {e}")
+            print(f"Error processing task for {task}: {e}")
+            sleep(3)
+
         task_queue.task_done()
 
 
-worker_thread = threading.Thread(target=worker)
-worker_thread.start()
+worker_thread_1 = threading.Thread(target=worker, args=('DEVICE_1',))
+worker_thread_2 = threading.Thread(target=worker, args=('DEVICE_2',))
+worker_thread_3 = threading.Thread(target=worker, args=('DEVICE_3',))
+
+worker_thread_1.start()
+worker_thread_2.start()
+worker_thread_3.start()
 
 
 @app.before_request
@@ -62,12 +68,4 @@ def gift_api():
 
 
 if __name__ == "__main__":
-    try:
-        # app.run(host="127.0.0.1", port=8080)
-        app.run(host="0.0.0.0", port=8080)
-    finally:
-        # Ensure all tasks are completed before exiting
-        task_queue.join()
-        # Stop the worker thread
-        task_queue.put(None)
-        worker_thread.join()
+    app.run(host="0.0.0.0", port=8080)

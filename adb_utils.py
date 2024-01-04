@@ -3,6 +3,7 @@ import subprocess
 from dotenv import load_dotenv
 from PIL import Image
 from io import BytesIO
+from time import sleep
 
 
 class AdbAutomation:
@@ -10,15 +11,12 @@ class AdbAutomation:
     A class to abstract the interactions with an Android device using ADB.
     """
 
-    def __init__(self):
+    def __init__(self, device_id):
         """
         Load the .env file and get the DEVICE_ID.
         """
         load_dotenv()
-        self.device_id = os.getenv("DEVICE_ID")
-
-        if self.device_id is None:
-            raise ValueError("DEVICE_ID not found in .env file")
+        self.device_id = os.getenv(device_id)
 
     def run(self, command, text=True):
         """
@@ -30,7 +28,7 @@ class AdbAutomation:
                 capture_output=True, text=text, shell=True)
             return result
         except Exception as e:
-            print(f"Error running command: {command}, error message: {e}")
+            print(f"Error running command: {command}, message: {e}")
 
     def tap(self, x, y):
         """
@@ -63,32 +61,28 @@ class AdbAutomation:
         """
         Starts an app using its package name and activity name.
         """
-        try:
-            if activity_name:
-                self.run(f"am start -n {package_name}/{activity_name}")
-            else:
-                self.run(f"am start -a android.intent.action.MAIN -n {package_name}")
-        except Exception as e:
-            print(f"Error while starting an app, error message: {e}")
+        if activity_name:
+            self.run(f"am start -n {package_name}/{activity_name}")
+        else:
+            self.run(f"am start -a android.intent.action.MAIN -n {package_name}")
 
     def take_screenshot(self):
         """
         Captures a screenshot from the specified Android device and returns it as a PIL image.
         """
-        try:
-            result = subprocess.run(f"adb -s {self.device_id} exec-out screencap -p",
-                                    capture_output=True, shell=True)
+        while True:
+            try:
+                result = subprocess.run(
+                    f"adb -s {self.device_id} exec-out screencap -p",
+                    capture_output=True, shell=True
+                )
 
-            if result.returncode != 0:
-                print("Error taking screenshot:", result.stderr.decode())
-                return None
+                # Correct line endings for compatibility
+                image_data = result.stdout.replace(b'\r\r\n', b'\n')
+                image_data = BytesIO(image_data)
 
-            # Correct line endings for compatibility
-            image_data = result.stdout.replace(b'\r\r\n', b'\n')
-            image_data = BytesIO(image_data)
-
-            image = Image.open(image_data)
-
-            return image
-        except Exception as e:
-            print(f"Error capturing screenshot: {e}")
+                image = Image.open(image_data)
+                return image
+            except Exception as e:
+                print(f"Error capturing screenshot: {e}")
+                sleep(1)

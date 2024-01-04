@@ -37,10 +37,12 @@ def gift_premium(automation, username):
 
     if is_desired_screen(screenshot, "No Telegram users found."):
         print(f"Skipping: No Telegram users found for username {username}")
+        save_unsuccessful_username(username)
         return
 
     if is_desired_screen(screenshot, "This account is already subscribed to Telegram Premium."):
         print(f"Skipping: The account {username} is already subscribed to Telegram Premium.")
+        save_unsuccessful_username(username)
         return
 
     # Tap on "6 month"
@@ -50,9 +52,10 @@ def gift_premium(automation, username):
 
     # Tap on "Gift Telegram Premium"
     if not tap_and_verify(
-            automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76,
-            "Gift Telegram Premium", 3
+        automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.76,
+        "Gift Telegram Premium", 3
     ):
+        save_unsuccessful_username(username)
         handle_failure(automation)
         return
 
@@ -61,21 +64,23 @@ def gift_premium(automation, username):
             automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9,
             "Scan the QR code", 2
     ):
+        save_unsuccessful_username(username)
         handle_failure(automation)
         return
 
     # Tap on "Buy Premium with Tonkeeper"
     if not tap_and_verify(
-            automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85,
-            "Confirm action", 2
+        automation, SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.85,
+        "Confirm action", 2
     ):
+        save_unsuccessful_username(username)
         handle_failure(automation)
         return
 
     # Tap on "Confirm"
     if not tap_and_verify(
-            automation, SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9,
-            "Enter passcode", 2
+        automation, SCREEN_WIDTH * 0.75, SCREEN_HEIGHT * 0.9,
+        "Enter passcode", 2
     ):
         handle_failure(automation)
         return
@@ -91,26 +96,25 @@ def gift_premium(automation, username):
     sleep(2)
 
     if not wait_for_correct_screen(automation, "Gift Sent!", msg=False):
+        save_unsuccessful_username(username)
         handle_failure(automation)
         return
 
     # Tap on "Send another gift"
     if not tap_and_verify(
-            automation, SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7,
-            "Premium Giveaways", 2
+        automation, SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.7,
+        "Premium Giveaways", 2
     ):
+        save_unsuccessful_username(username)
         handle_failure(automation)
         return
 
     # Tap on "Buy Premium for a User"
-    for _ in range(2):
-        automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
-        sleep(1)
+    automation.tap(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.6)
+    sleep(1)
 
     # Tap for return
     automation.tap(SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.25)
-
-    save_successful_username(username)
 
 
 def wait_for_correct_screen(automation, expected_text, msg=True, iterations=50):
@@ -185,6 +189,6 @@ def is_desired_screen(image, expected_text, similarity_threshold=90):
     return similarity >= similarity_threshold
 
 
-def save_successful_username(username, filename="successful_usernames.txt"):
+def save_unsuccessful_username(username, filename="unsuccessful_usernames.txt"):
     with open(filename, "a") as f:
         f.write(username + "\n")
