@@ -34,11 +34,9 @@ def worker(device_id):
 
 worker_thread_1 = threading.Thread(target=worker, args=('DEVICE_1',))
 worker_thread_2 = threading.Thread(target=worker, args=('DEVICE_2',))
-worker_thread_3 = threading.Thread(target=worker, args=('DEVICE_3',))
 
 worker_thread_1.start()
 worker_thread_2.start()
-worker_thread_3.start()
 
 
 @app.before_request
