@@ -29,7 +29,7 @@ def worker(device_id):
         task_queue.task_done()
 
 
-for device_number in range(1):
+for device_number in range(2):
     worker_thread = threading.Thread(target=worker, args=(f'DEVICE_{device_number + 1}',))
     worker_thread.start()
 
