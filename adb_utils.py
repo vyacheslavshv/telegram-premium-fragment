@@ -78,7 +78,7 @@ class AdbAutomation:
                 )
 
                 # Correct line endings for compatibility
-                image_data = result.stdout.replace(b'\r\r\n', b'\n')
+                # image_data = result.stdout.replace(b'\r\r\n', b'\n')
                 image_data = BytesIO(image_data)
 
                 image = Image.open(image_data)
