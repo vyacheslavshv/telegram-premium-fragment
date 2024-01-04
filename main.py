@@ -29,11 +29,9 @@ def worker(device_id):
         task_queue.task_done()
 
 
-worker_thread_1 = threading.Thread(target=worker, args=('DEVICE_1',))
-worker_thread_2 = threading.Thread(target=worker, args=('DEVICE_2',))
-
-worker_thread_1.start()
-worker_thread_2.start()
+for device_number in range(1):
+    worker_thread = threading.Thread(target=worker, args=(f'DEVICE_{device_number + 1}',))
+    worker_thread.start()
 
 
 @app.before_request
