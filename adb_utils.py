@@ -68,21 +68,29 @@ class AdbAutomation:
 
     def take_screenshot(self):
         """
-        Captures a screenshot from the specified Android device and returns it as a PIL image.
+        Captures a screenshot from the specified Android device, saves it on the device,
+        then pulls the image to the local system and opens it as a PIL image.
         """
+        screenshot_name = f"screenshot_{self.device_id}.png"
+        local_screenshot_path = f"{screenshot_name}"
+
         while True:
             try:
-                result = subprocess.run(
-                    f"adb -s {self.device_id} exec-out screencap -p",
-                    capture_output=True, shell=True
-                )
+                # Save the screenshot to the device's storage
+                subprocess.run(f"adb -s {self.device_id} shell screencap -p /sdcard/{screenshot_name}",
+                               shell=True, check=True)
 
-                # Correct line endings for compatibility
-                image_data = result.stdout.replace(b'\r\r\n', b'\n')
-                image_data = BytesIO(image_data)
+                # Pull the image to the local machine
+                subprocess.run(f"adb -s {self.device_id} pull /sdcard/{screenshot_name} {local_screenshot_path}",
+                               shell=True, check=True)
 
-                image = Image.open(image_data)
+                # Open the image from the local file
+                image = Image.open(local_screenshot_path)
                 return image
+
+            except subprocess.CalledProcessError as e:
+                print(f"ADB command failed: {e}")
+                sleep(1)
             except Exception as e:
-                print(f"Error capturing screenshot: {e}")
+                print(f"Error processing screenshot file: {e}")
                 sleep(1)
